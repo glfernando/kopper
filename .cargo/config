@@ -1,0 +1,13 @@
+
+[build]
+target = "aarch64-unknown-none"
+
+[target.aarch64-unknown-none]
+linker = "rust-lld"
+rustflags = [
+    "-C", "relocation-model=pic",
+    "-C", "link-arg=-Tsrc/board/qemu/aarch64/linker.ld",
+    "-C", "link-arg=-maarch64elf",
+    "-C", "link-arg=-pie",
+    "-C", "link-arg=--gc-sections",
+]
