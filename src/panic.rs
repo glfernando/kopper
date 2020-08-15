@@ -1,8 +1,8 @@
-/*
- * SPDX-License-Identifier: BSD-3-Clause
- *
- * Copyright (c) 2020 Fernando Lugo <lugo.fernando@gmail.com>
- */
+//
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 2020 Fernando Lugo <lugo.fernando@gmail.com>
+//
 
 use core::panic::PanicInfo;
 
@@ -10,4 +10,3 @@ use core::panic::PanicInfo;
 fn panic(_: &PanicInfo) -> ! {
     loop {}
 }
-
