@@ -1,8 +1,8 @@
-/*
- * SPDX-License-Identifier: BSD-3-Clause
- *
- * Copyright (c) 2020 Fernando Lugo <lugo.fernando@gmail.com>
- */
+//
+// SPDX-License-Identifier: BSD-3-Clause
+//
+// Copyright (c) 2020 Fernando Lugo <lugo.fernando@gmail.com>
+//
 
 global_asm!(include_str!("loader.S"));
 global_asm!(include_str!("start.S"));

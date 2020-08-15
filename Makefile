@@ -2,7 +2,6 @@
 #
 # Copyright (c) 2020 Fernando Lugo <lugo.fernando@gmail.com>
 
-
 BOARD ?= qemu-aarch64
 RELEASE ?= 0
 
@@ -57,7 +56,7 @@ kopper.bin: $(KOPPER_ELF)
 	$(Q)$(OBJCOPY) $(OBJCPYFLAGS) $< $@
 
 $(KOPPER_ELF):
-	RUSTFLAGS="$(RUSTFLAGS)" $(RUSTC) $(COMPILER_ARGS) -Z build-std=core
+	RUSTFLAGS="$(RUSTFLAGS_PEDANTIC)" $(RUSTC) $(COMPILER_ARGS) -Z build-std=core
 
 clean:
 	cargo clean $(COMPILER_ARGS)
