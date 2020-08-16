@@ -20,7 +20,7 @@ LINKER_SCRIPT ?= src/board/$(BOARD_PATH)/linker.ld
 export LINKER_SCRIPT
 
 RUSTFLAGS = -C link-arg=-T$(LINKER_SCRIPT) -C linker="rust-lld" -C relocation-model=pic \
-	    $(BOARD_RUSTFLAGS)
+	    -C link-arg=-pie $(BOARD_RUSTFLAGS)
 RUSTFLAGS_PEDANTIC = $(RUSTFLAGS) -D warnings -D missing_docs
 
 COMPILER_ARGS = --target=$(TARGET)
@@ -36,8 +36,8 @@ KOPPER_ELF = target/$(TARGET)/$(TARGET_BUILD)/kopper
 
 OBJCOPY = rust-objcopy
 
-OBJCPYFLAGS = -S -O binary
-RUSTC = cargo rustc
+OBJCPYFLAGS = -O binary
+RUSTC = cargo build
 
 # Quiet mode
 ifeq ($(V), 1)
