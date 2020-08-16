@@ -26,8 +26,10 @@ _loader:
         // read offset
         adr     x7, _loader     // actual load address
         ldr     x8, =_loader    // address from elf fine
+
         subs    x9, x7, x8
-        beq     _reloc_done     // offset == 0
+        // FIXME: for some reason we need to relocate even when offset is 0
+        //beq     _reloc_done     // offset == 0
 
          //Lets check if we have data in .rela_dyn, if so then we fix up address in .got
         adrp    x5, __rela_dyn_start
