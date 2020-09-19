@@ -10,6 +10,7 @@
 #![no_main]
 #![feature(global_asm)]
 #![feature(format_args_nl)]
+#![feature(asm)]
 
 mod cpu;
 mod panic;
