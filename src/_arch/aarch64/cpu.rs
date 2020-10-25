@@ -9,5 +9,11 @@ global_asm!(include_str!("start.S"));
 
 #[no_mangle]
 pub extern "C" fn cpu_start() -> ! {
-    crate::kmain();
+    // call extern kmain function
+    extern "Rust" {
+        pub fn main() -> !;
+    }
+    unsafe {
+        main();
+    }
 }

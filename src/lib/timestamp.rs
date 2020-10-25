@@ -1,6 +1,7 @@
 #[cfg(target_arch = "aarch64")]
 /// implement aarch64 low level functions
 pub mod aarch64;
+#[cfg(target_arch = "aarch64")]
 pub use aarch64::*;
 
 fn ticks_to_xs(ticks: u64, x: u32) -> u64 {
