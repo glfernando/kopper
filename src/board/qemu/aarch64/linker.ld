@@ -34,6 +34,11 @@ SECTIONS
     . = . + 0x10000; /* TODO: make it configurable */
     __stack_end = .;
 
+    . = ALIGN(16);
+    __heap_start = .;
+    . = . + 0x100000; /* TODO: make it configurable */
+    __heap_end = .;
+
     /DISCARD/ :
     {
         *(.eh_frame*)
