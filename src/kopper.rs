@@ -4,6 +4,8 @@
 #![feature(global_asm)]
 #![feature(format_args_nl)]
 #![feature(asm)]
+#![feature(alloc_error_handler)]
+#![feature(const_raw_ptr_to_usize_cast)]
 
 /// kopper libraries
 pub mod lib;

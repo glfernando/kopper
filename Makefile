@@ -56,7 +56,7 @@ kopper.bin: $(KOPPER_ELF)
 	$(Q)$(OBJCOPY) $(OBJCPYFLAGS) $< $@
 
 $(KOPPER_ELF):
-	RUSTFLAGS="$(RUSTFLAGS_PEDANTIC)" $(RUSTC) $(COMPILER_ARGS) -Z build-std=core
+	RUSTFLAGS="$(RUSTFLAGS_PEDANTIC)" $(RUSTC) $(COMPILER_ARGS) -Z build-std=core,alloc
 
 clean:
 	cargo clean $(COMPILER_ARGS)
