@@ -6,3 +6,9 @@ pub mod timestamp;
 
 /// provide delay rutines
 pub mod delay;
+
+/// provide functions to allocate and free from the heap
+pub mod heap;
+
+/// simple memory allocator
+pub mod allocator;
