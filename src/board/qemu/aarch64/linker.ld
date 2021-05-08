@@ -1,18 +1,20 @@
 
+ENTRY(_loader)
+
 SECTIONS
 {
-    . = 0x40080000;
+    . = 0x0;
 
     .text : {
         KEEP(*(.loader))
-        KEEP(*(.text*))
+        *(.text .text.*)
     }
 
-    .rodata ALIGN(4096) : {
+    .rodata ALIGN(16) : {
         *(.rodata*)
     }
 
-    .data ALIGN(4096): {
+    .data ALIGN(16): {
         *(.data)
     }
 
@@ -48,5 +50,7 @@ SECTIONS
 	*(.dynstr*)
 	*(.gnu*)
 	*(.hash*)
+	*(.dynamic)
+	*(.plt*)
     }
 }

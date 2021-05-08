@@ -6,6 +6,7 @@
 #![feature(asm)]
 #![feature(alloc_error_handler)]
 #![feature(const_raw_ptr_to_usize_cast)]
+#![feature(naked_functions)]
 
 /// kopper libraries
 pub mod lib;

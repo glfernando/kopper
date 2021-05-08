@@ -19,3 +19,4 @@ opt-level = "z"
 panic = "abort"
 opt-level = "z"
 lto = true
+debug = true
