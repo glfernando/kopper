@@ -61,3 +61,6 @@ $(KOPPER_ELF):
 clean:
 	cargo clean $(COMPILER_ARGS)
 	rm -f kopper.bin
+
+# allow board code to provide extra rules
+-include src/board/$(BOARD_PATH)/rules.mk
