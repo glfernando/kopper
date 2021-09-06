@@ -1,2 +1,5 @@
 /target
 kopper.bin
+
+# vim swap files
+*.swp
