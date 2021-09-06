@@ -8,9 +8,6 @@ edition = "2018"
 
 [dependencies]
 
-[lib]
-path = "src/kopper.rs"
-
 [profile.dev]
 panic = "abort"
 opt-level = "z"
