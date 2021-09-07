@@ -91,25 +91,6 @@ unsafe fn loader() -> ! {
 }
 
 fn start() -> ! {
-    // initialize BSS section
-    let bss = unsafe {
-        let bss_start = &mut __bss_start as *mut _;
-        let bss_end = &mut __bss_end as *mut u32;
-        let size = bss_end.offset_from(bss_start) as usize;
-
-        core::slice::from_raw_parts_mut(bss_start, size)
-    };
-
-    for x in bss {
-        *x = 0;
-    }
-
-    // call extern kmain function
-    extern "Rust" {
-        pub fn main() -> !;
-    }
-
-    unsafe {
-        main();
-    }
+    use crate::rrt;
+    rrt::init();
 }

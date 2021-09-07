@@ -4,3 +4,4 @@
 
 TARGET = aarch64-unknown-none
 BOARD_RUSTFLAGS = -C target-cpu=cortex-a53
+RELOCATION = 1

@@ -5,8 +5,10 @@
 BOARD ?= qemu-aarch64
 RELEASE ?= 0
 
-ifeq  ($(BOARD), qemu-aarch64)
+ifeq ($(BOARD), qemu-aarch64)
 BOARD_PATH = qemu/aarch64
+else ifeq ($(BOARD), pico)
+BOARD_PATH = raspberrypi/pico
 else
 $(error invalid board)
 endif
@@ -15,15 +17,19 @@ endif
 -include src/board/$(BOARD_PATH)/Makefile
 
 LINKER_SCRIPT ?= src/board/$(BOARD_PATH)/linker.ld
+RELOCATION ?= 0
 
 # Export for build.rs
 export LINKER_SCRIPT
 
-RUSTFLAGS = -C link-arg=-T$(LINKER_SCRIPT) -C linker="rust-lld" -C relocation-model=pic \
-	    -C link-arg=-pie $(BOARD_RUSTFLAGS)
+RUSTFLAGS = -C link-arg=-T$(LINKER_SCRIPT) -C linker="rust-lld" $(BOARD_RUSTFLAGS)
+ifeq ($(RELOCATION), 1)
+RUSTFLAGS += -C relocation-model=pic -C link-arg=-pie
+endif
 RUSTFLAGS_PEDANTIC = $(RUSTFLAGS) -D warnings -D missing_docs
 
 COMPILER_ARGS = --target=$(TARGET)
+FEATURES = --features board_$(BOARD)
 
 ifeq ($(RELEASE), 1)
 COMPILER_ARGS += --release
@@ -56,7 +62,7 @@ kopper.bin: $(KOPPER_ELF)
 	$(Q)$(OBJCOPY) $(OBJCPYFLAGS) $< $@
 
 $(KOPPER_ELF):
-	RUSTFLAGS="$(RUSTFLAGS_PEDANTIC)" $(RUSTC) $(COMPILER_ARGS) -Z build-std=core,alloc
+	RUSTFLAGS="$(RUSTFLAGS_PEDANTIC)" $(RUSTC) $(COMPILER_ARGS) $(FEATURES) -Z build-std=core,alloc
 
 clean:
 	cargo clean $(COMPILER_ARGS)
