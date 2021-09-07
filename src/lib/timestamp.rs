@@ -4,6 +4,12 @@ pub mod aarch64;
 #[cfg(target_arch = "aarch64")]
 pub use aarch64::*;
 
+#[cfg(feature = "board_pico")]
+/// implement raspberry pi pico low level functions
+pub mod pico;
+#[cfg(feature = "board_pico")]
+pub use pico::*;
+
 fn ticks_to_xs(ticks: u64, x: u32) -> u64 {
     ticks * x as u64 / freq()
 }

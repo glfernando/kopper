@@ -17,3 +17,10 @@ panic = "abort"
 opt-level = "z"
 lto = true
 debug = true
+
+[features]
+default = []
+qemu = []
+raspberrypi = []
+board_qemu-aarch64 = ["qemu"]
+board_pico = ["raspberrypi"]
