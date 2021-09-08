@@ -1,23 +1,14 @@
-//! kopper is a simple baremetal kernel
+/// provides println! and print! macros
+pub mod print;
 
-#![no_std]
-#![feature(global_asm)]
-#![feature(format_args_nl)]
-#![feature(asm)]
-#![feature(alloc_error_handler)]
-//#![feature(const_raw_ptr_to_usize_cast)]
-#![feature(naked_functions)]
+/// provides timestamp related functions
+pub mod timestamp;
 
-/// kopper libraries
-#[path = "lib/lib.rs"]
-pub mod lib;
+/// provide delay rutines
+pub mod delay;
 
-/// devices
-pub mod device;
+/// provide functions to allocate and free from the heap
+pub mod heap;
 
-/// boards
-pub mod board;
-
-mod cpu;
-mod panic;
-mod rrt;
+/// simple memory allocator
+pub mod allocator;
