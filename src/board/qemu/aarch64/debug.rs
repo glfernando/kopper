@@ -1,23 +1,22 @@
 use crate::device;
-use core::fmt;
+
 struct QemuDebugCon;
 
-impl device::console::ConsoleOut for QemuDebugCon {
-    fn write_str(&mut self, s: &str) -> fmt::Result {
+impl device::console::Console for QemuDebugCon {
+    fn putc(&self, c: char) -> Result<(), &'static str> {
         unsafe {
-            core::ptr::write_volatile(0x0900_002c as *mut u32, 1 << 4);
-            core::ptr::write_volatile(0x0900_0030 as *mut u32, 0x301);
-        }
-        for c in s.chars() {
-            unsafe {
-                core::ptr::write_volatile(0x0900_0000 as *mut u32, c as u32);
-            }
+            core::ptr::write_volatile(0x0900_0000 as *mut u32, c as u32);
         }
         Ok(())
+    }
+
+    fn getc(&self) -> Result<char, &'static str> {
+        let c = unsafe { core::ptr::read_volatile(0x0900_0000 as *mut u32) as u8 };
+        Ok(c as char)
     }
 }
 
 /// return simple consout out object
-pub fn console() -> impl device::console::ConsoleOut {
+pub fn console() -> impl device::console::Console {
     QemuDebugCon {}
 }

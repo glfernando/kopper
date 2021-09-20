@@ -1,11 +1,24 @@
 use crate::{board, device};
 use core::fmt;
+use core::fmt::Write;
+use device::console::Console;
+
+struct ConsolePrinter;
+
+impl core::fmt::Write for ConsolePrinter {
+    fn write_str(&mut self, s: &str) -> fmt::Result {
+        let console = board::debug::console();
+        for c in s.chars() {
+            console.putc(c).map_err(|_| fmt::Error {})?;
+        }
+        Ok(())
+    }
+}
 
 #[doc(hidden)]
 pub fn _print(args: fmt::Arguments) {
-    use device::console::ConsoleOut;
-
-    board::debug::console().write_fmt(args).unwrap();
+    let mut con = ConsolePrinter {};
+    con.write_fmt(args).unwrap();
 }
 
 /// Prints without a newline.
