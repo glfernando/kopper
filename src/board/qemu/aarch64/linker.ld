@@ -14,6 +14,13 @@ SECTIONS
         *(.rodata .rodata.*)
     }
 
+    .shell_cmds ALIGN(8) : {
+        __shell_cmds_start = .;
+        KEEP(*(SORT(.shell_cmds.*)))
+        KEEP(*(.shell_cmds))
+        __shell_cmds_end = .;
+    }
+
     .data ALIGN(16): {
         *(.data .data.*)
     }

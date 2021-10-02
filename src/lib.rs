@@ -12,3 +12,6 @@ pub mod heap;
 
 /// simple memory allocator
 pub mod allocator;
+
+/// console module
+pub mod console;
