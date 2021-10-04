@@ -38,7 +38,7 @@ impl Allocator {
             if (*self.current.get()).is_null() {
                 // validate parameters
                 assert!(self.end > self.start);
-                assert!(self.end.offset_from(self.start) <= u32::MAX as isize);
+                assert!(self.end.offset_from(self.start) as usize <= u32::MAX as usize);
 
                 // TODO: use current to cache free chunk;
                 *self.current.get() = self.start as *mut u8;
