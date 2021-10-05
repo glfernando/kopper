@@ -59,3 +59,6 @@ fn _start() -> ! {
     use crate::rrt;
     rrt::init();
 }
+
+#[no_mangle]
+fn __aeabi_unwind_cpp_pr0() {}
