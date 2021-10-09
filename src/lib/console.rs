@@ -4,6 +4,7 @@ use crate::device;
 use crate::{println, shell_cmd};
 use alloc::collections::vec_deque::VecDeque;
 use alloc::string::String;
+use alloc::vec::Vec;
 use core::fmt;
 use core::fmt::Write;
 use core::write;
@@ -211,9 +212,43 @@ fn get_line(
                 _ => continue,
             },
             TAB => {
-                // TODO: implement autocomplete
-                con.putc(BELL)?;
-                continue;
+                if pos == 0 || pos != line.len() {
+                    con.putc(BELL)?;
+                    continue;
+                }
+                let matches = find_all_matches(&line);
+                let matches_len = matches.len();
+                if matches_len == 0 {
+                    con.putc(BELL)?;
+                    continue;
+                }
+                if matches_len == 1 {
+                    // lets autoocmplete the command
+                    con.puts(&matches[0][pos..])?;
+                    line.push_str(&matches[0][pos..]);
+                    // add extra space
+                    con.putc(' ')?;
+                    line.push(' ');
+                    pos = line.len();
+                    continue;
+                }
+
+                // multiple matches
+                let mci = find_mci(&matches);
+                if pos < mci {
+                    // update command part to all common part
+                    con.puts(&matches[0][pos..mci])?;
+                    line.push_str(&matches[0][pos..mci]);
+                    pos = line.len();
+                    continue;
+                }
+
+                // let's print them all
+                con.putc('\n')?;
+                matches.iter().for_each(|&cmd| cprint!(con, "{}", cmd));
+                // restore promp
+                con.puts(PROMPT)?;
+                con.puts(line)?;
             }
             c => {
                 // check if we cannot accept more chars
@@ -223,7 +258,6 @@ fn get_line(
                 }
                 if pos == size {
                     con.putc(c)?;
-                    //line[pos] = c as u8;
                     line.push(c);
                     pos += 1;
                     continue;
@@ -322,6 +356,32 @@ fn get_cmd_list() -> &'static [ConCmd] {
     let cmds = unsafe { core::slice::from_raw_parts(cmds_start as *const ConCmd, size) };
 
     cmds
+}
+
+fn find_all_matches(line: &str) -> Vec<&'static str> {
+    let cmds = get_cmd_list();
+
+    cmds.iter()
+        .filter_map(|cmd| {
+            if cmd.name.starts_with(line) {
+                Some(cmd.name)
+            } else {
+                None
+            }
+        })
+        .collect()
+}
+
+fn find_mci(cmds: &Vec<&str>) -> usize {
+    let name = cmds[0];
+    for i in 1..name.len() {
+        for &cmd in cmds {
+            if name.as_bytes()[i] != cmd.as_bytes()[i] {
+                return i;
+            }
+        }
+    }
+    name.len()
 }
 
 /// run a shell command
