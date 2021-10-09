@@ -2,12 +2,15 @@ extern crate alloc;
 
 use crate::device;
 use crate::{println, shell_cmd};
+use alloc::collections::vec_deque::VecDeque;
 use alloc::string::String;
 use core::fmt;
 use core::fmt::Write;
 use core::write;
 
 const MAX_LINE_SIZE: usize = 128;
+const MAX_HISTORY_SIZE: usize = 16;
+
 const PROMPT: &'static str = "ksh> ";
 const BACKSPACE: char = '\x08';
 const DEL: char = '\x7f';
@@ -82,18 +85,40 @@ macro_rules! cprintln {
 /// run interactive shell
 pub fn run_shell(dev_con: &impl device::console::Console) -> Result<(), &'static str> {
     let mut con = Console::new(dev_con);
+
+    let mut history = VecDeque::new();
+
     loop {
         con.puts(PROMPT)?;
-        let mut line = String::new();
-        get_line(&mut con, &mut line)?;
+        let mut line = if MAX_HISTORY_SIZE == history.len() {
+            history.pop_front().unwrap()
+        } else {
+            String::new()
+        };
+        get_line(&mut con, &mut line, &history)?;
+
         if let Err(e) = run_cmd(&mut con, &line) {
             println!("{}", e);
+        } else {
+            if !line.is_empty() {
+                // save command (if different from previous one)
+                if history.len() == 0 || !line.eq(&history[history.len() - 1]) {
+                    history.push_back(line);
+                }
+            }
         }
     }
 }
 
-fn get_line(con: &mut Console, line: &mut String) -> Result<(), &'static str> {
+fn get_line(
+    con: &mut Console,
+    line: &mut String,
+    history: &VecDeque<String>,
+) -> Result<(), &'static str> {
+    line.clear();
     let mut pos = 0usize;
+    let mut hi = history.len();
+    let mut line_bak = String::new();
     loop {
         let c = con.getc()?;
         let size = line.len();
@@ -117,10 +142,37 @@ fn get_line(con: &mut Console, line: &mut String) -> Result<(), &'static str> {
             }
             ESC => match get_esc_seq(con)? {
                 EscSeq::CurUp => {
-                    continue;
+                    if hi == 0 {
+                        con.putc(BELL)?;
+                        continue;
+                    }
+                    if hi == history.len() {
+                        line_bak = line.clone();
+                    }
+                    hi -= 1;
+                    line.clear();
+                    line.push_str(&history[hi][..]);
+                    set_cursor_pos(con, 0)?;
+                    con.puts(line)?;
+                    con.puts(ERASE_EOL)?;
+                    pos = line.len();
                 }
                 EscSeq::CurDown => {
-                    continue;
+                    if hi == history.len() {
+                        con.putc(BELL)?;
+                        continue;
+                    }
+                    hi += 1;
+                    line.clear();
+                    if hi == history.len() {
+                        line.push_str(&line_bak);
+                    } else {
+                        line.push_str(&history[hi]);
+                    }
+                    set_cursor_pos(con, 0)?;
+                    con.puts(line)?;
+                    con.puts(ERASE_EOL)?;
+                    pos = line.len();
                 }
                 EscSeq::CurForward => {
                     if pos == size {
