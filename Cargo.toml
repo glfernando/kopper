@@ -8,6 +8,7 @@ edition = "2018"
 
 [dependencies]
 kopper-macros = { path = "macros" }
+num-traits = { version="0.2.14", default-features = false}
 
 [lib]
 path = "src/kopper.rs"

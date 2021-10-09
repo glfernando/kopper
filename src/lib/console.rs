@@ -100,12 +100,12 @@ pub fn run_shell(dev_con: &impl device::console::Console) -> Result<(), &'static
 
         if let Err(e) = run_cmd(&mut con, &line) {
             println!("{}", e);
-        } else {
-            if !line.is_empty() {
-                // save command (if different from previous one)
-                if history.len() == 0 || !line.eq(&history[history.len() - 1]) {
-                    history.push_back(line);
-                }
+        }
+
+        if !line.is_empty() {
+            // save command (if different from previous one)
+            if history.len() == 0 || !line.eq(&history[history.len() - 1]) {
+                history.push_back(line);
             }
         }
     }

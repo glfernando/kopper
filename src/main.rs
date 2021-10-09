@@ -12,6 +12,8 @@
 #![feature(format_args_nl)]
 #![feature(asm)]
 
+mod cmds;
+
 use kopper::board;
 use kopper::lib::console;
 use kopper::println;
