@@ -1,7 +1,7 @@
 extern crate alloc;
 
 use crate::device;
-use crate::println;
+use crate::{println, shell_cmd};
 use alloc::string::String;
 use core::fmt;
 use core::fmt::Write;
@@ -246,7 +246,8 @@ pub struct ConCmd {
 }
 
 impl ConCmd {
-    const fn new(
+    /// create new shell command
+    pub const fn new(
         name: &'static str,
         help: &'static str,
         func: fn(&mut Console, Args) -> Result<(), &'static str>,
@@ -290,6 +291,7 @@ pub fn run_cmd(con: &mut Console, cmd_str: &str) -> Result<(), &'static str> {
     Err("command not found")
 }
 
+#[shell_cmd(help, "list all commands + description")]
 fn help_cmd(con: &mut Console, args: Args) -> Result<(), &'static str> {
     let name = args.into_iter().skip(1).next().unwrap_or("");
 
@@ -302,8 +304,3 @@ fn help_cmd(con: &mut Console, args: Args) -> Result<(), &'static str> {
 
     Ok(())
 }
-
-// TODO: create proc macro attribute to declare shell commands
-#[link_section = ".shell_cmds.help"]
-#[used]
-static HELP_CMD: ConCmd = ConCmd::new("help", "list all commands + description", help_cmd);

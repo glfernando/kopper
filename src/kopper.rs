@@ -10,6 +10,8 @@
 #![feature(const_fn_fn_ptr_basics)]
 #![feature(const_mut_refs)]
 
+extern crate kopper_macros as macros;
+
 /// kopper libraries
 pub mod lib;
 
@@ -22,3 +24,5 @@ pub mod board;
 mod cpu;
 mod panic;
 mod rrt;
+
+pub use macros::shell_cmd;
