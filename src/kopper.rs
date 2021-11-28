@@ -9,6 +9,7 @@
 #![feature(naked_functions)]
 #![feature(const_fn_fn_ptr_basics)]
 #![feature(const_mut_refs)]
+#![feature(asm_sym)]
 
 extern crate kopper_macros as macros;
 
