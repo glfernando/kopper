@@ -23,7 +23,7 @@ static VERSION: &str = "0.0.1";
 /// kopper app entry point
 #[no_mangle]
 pub fn main() -> ! {
-    println!("Welcome to kopper version {}", VERSION);
+    println!("Welcome to kopper version {VERSION}");
 
     console::run_shell(&board::debug::console()).unwrap();
 
