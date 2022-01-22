@@ -8,9 +8,7 @@
 
 #![no_std]
 #![no_main]
-#![feature(global_asm)]
 #![feature(format_args_nl)]
-#![feature(asm)]
 
 mod cmds;
 

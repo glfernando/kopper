@@ -40,6 +40,7 @@ extern "C" {
 
 const R_AARCH64_RELATIVE: u64 = 1027;
 
+use core::arch::asm;
 use core::mem;
 use core::ptr::write_volatile;
 
