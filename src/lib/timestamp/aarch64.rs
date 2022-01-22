@@ -1,3 +1,5 @@
+use core::arch::asm;
+
 /// return number of ticks since power on
 pub fn ticks() -> u64 {
     let r: u64;
