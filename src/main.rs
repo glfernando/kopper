@@ -16,7 +16,7 @@ use kopper::board;
 use kopper::lib::console;
 use kopper::println;
 
-static VERSION: &str = "0.0.1";
+const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 /// kopper app entry point
 #[no_mangle]
