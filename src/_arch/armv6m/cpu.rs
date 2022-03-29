@@ -12,6 +12,8 @@ extern "C" {
     static mut __fdata: u32;
 }
 
+use core::arch::asm;
+
 #[no_mangle]
 #[naked]
 #[link_section = ".reset"]

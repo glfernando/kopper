@@ -9,6 +9,7 @@ edition = "2021"
 [dependencies]
 kopper-macros = { path = "macros" }
 num-traits = { version="0.2.14", default-features = false}
+tock-registers = "0.7.0"
 
 [lib]
 path = "src/kopper.rs"
@@ -27,5 +28,6 @@ debug = true
 default = []
 qemu = []
 raspberrypi = []
-board_qemu-aarch64 = ["qemu"]
-board_pico = ["raspberrypi"]
+pl011 = []
+board_qemu-aarch64 = ["qemu", "pl011"]
+board_pico = ["raspberrypi", "pl011"]

@@ -14,6 +14,7 @@ version = "0.1.0"
 dependencies = [
  "kopper-macros",
  "num-traits",
+ "tock-registers",
 ]
 
 [[package]]
@@ -61,6 +62,12 @@ dependencies = [
  "quote",
  "unicode-xid",
 ]
+
+[[package]]
+name = "tock-registers"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ee8fba06c1f4d0b396ef61a54530bb6b28f0dc61c38bc8bc5a5a48161e6282e"
 
 [[package]]
 name = "unicode-xid"
