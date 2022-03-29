@@ -4,7 +4,6 @@
 #![feature(format_args_nl)]
 #![feature(alloc_error_handler)]
 #![feature(naked_functions)]
-#![feature(const_fn_fn_ptr_basics)]
 #![feature(const_mut_refs)]
 #![feature(asm_sym)]
 
