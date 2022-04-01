@@ -98,6 +98,10 @@ pub fn run_shell(dev_con: &impl device::console::Console) -> Result<(), &'static
         };
         get_line(&mut con, &mut line, &history)?;
 
+        if line == "exit" {
+            break;
+        }
+
         if let Err(e) = run_cmd(&mut con, &line) {
             println!("{}", e);
         }
@@ -109,6 +113,7 @@ pub fn run_shell(dev_con: &impl device::console::Console) -> Result<(), &'static
             }
         }
     }
+    Ok(())
 }
 
 fn get_line(
