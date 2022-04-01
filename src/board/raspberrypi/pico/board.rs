@@ -1,6 +1,11 @@
 /// code for debugging
 pub mod debug;
 
+/// peripherals definition
+pub mod peripherals;
+
+use core::arch::{asm, global_asm};
+
 // pico bootloader
 global_asm!(include_str!("bs2_default_padded_checksummed.S"));
 
@@ -107,18 +112,5 @@ pub fn init() {
     write(0x40014004, 2);
     write(0x4001400c, 2);
 
-    // initialize uart
-    const UART0_BASE: u32 = 0x4003_4000;
-    const UART_IBRD: u32 = UART0_BASE + 0x24;
-    const UART_FBRD: u32 = UART0_BASE + 0x28;
-    const UART_LCR_H: u32 = UART0_BASE + 0x2c;
-    const UART_CR: u32 = UART0_BASE + 0x30;
-    // set baudrate
-    write(UART_IBRD, 0x21);
-    write(UART_FBRD, 0x3a);
-    // enable fifo
-    write(UART_LCR_H, 0x70);
-
-    // enable uart
-    write(UART_CR, 0x301);
+    peripherals::init();
 }
