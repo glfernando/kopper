@@ -25,5 +25,5 @@ pub fn main() -> ! {
 
     console::run_shell(&board::debug::console()).unwrap();
 
-    loop {}
+    board::power::shutdown();
 }
