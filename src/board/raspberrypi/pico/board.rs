@@ -4,6 +4,9 @@ pub mod debug;
 /// peripherals definition
 pub mod peripherals;
 
+/// implement power functions
+pub mod power;
+
 use core::arch::{asm, global_asm};
 
 // pico bootloader
