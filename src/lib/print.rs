@@ -21,6 +21,11 @@ pub fn _print(args: fmt::Arguments) {
     con.write_fmt(args).unwrap();
 }
 
+/// retunrs standard output console
+pub fn get_stdio() -> impl core::fmt::Write {
+    ConsolePrinter {}
+}
+
 /// Prints without a newline.
 #[macro_export]
 macro_rules! print {
