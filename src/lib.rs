@@ -15,3 +15,6 @@ pub mod allocator;
 
 /// console module
 pub mod console;
+
+/// hexdump
+pub mod hexdump;
