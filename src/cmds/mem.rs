@@ -3,6 +3,7 @@ extern crate num_traits;
 
 use alloc::vec::Vec;
 use kopper::lib::console::{Args, ConCmd, Console};
+use kopper::lib::hexdump::HexdumpConfig;
 use kopper::{cprintln, shell_cmd};
 use num_traits::Num;
 
@@ -33,7 +34,51 @@ fn parse_num<T: Num>(s: &str) -> Result<T, &'static str> {
 
 #[shell_cmd(mem, "read and write memory")]
 pub fn mem_cmd(con: &mut Console, args: Args) -> Result<(), &'static str> {
-    let args: Vec<&str> = args.into_iter().skip(1).collect();
+    let mut args: Vec<&str> = args.into_iter().skip(1).collect();
+
+    let mut group = 4;
+    let mut print_offset = false;
+    let mut ascii = false;
+
+    // parse command options
+    {
+        let mut i = 0usize;
+        while i < args.len() {
+            let opt = args[i];
+            match opt {
+                "-g" => {
+                    // remove option
+                    args.remove(i);
+                    // we need another parameter for core number
+                    if i >= args.len() {
+                        cprintln!(con, "missing group number");
+                    }
+                    group = args[i].parse().map_err(|e| {
+                        cprintln!(con, "failde to parse group number {}", e);
+                        "parse error"
+                    })?;
+                    args.remove(i);
+                }
+                "-o" => {
+                    // remove option
+                    args.remove(i);
+                    print_offset = true;
+                }
+                "-a" => {
+                    // remove option
+                    args.remove(i);
+                    ascii = true;
+                }
+                _ => i += 1,
+            }
+        }
+    }
+
+    // validate group
+    if group == 0 || ((group - 1) & group) != 0 || group > 8 {
+        cprintln!(con, "invalid group number {}", group);
+        return Err("invalid params");
+    }
 
     if args.len() < 1 || args.len() > 2 {
         mem_usage(con);
@@ -114,10 +159,14 @@ pub fn mem_cmd(con: &mut Console, args: Args) -> Result<(), &'static str> {
                 let val = unsafe { p.read_volatile() };
                 cprintln!(con, "{:016x}", val);
             }
-            x => {
-                // TODO: implement hexdump here
-                cprintln!(con, "unsupported reading size {}", x);
-                return Err("invalid params");
+            _ => {
+                let p = addr as *const u8;
+                let buf = unsafe { core::slice::from_raw_parts(p, size) };
+                HexdumpConfig::new()
+                    .group(group)
+                    .offset(print_offset)
+                    .ascii(ascii)
+                    .hexdump(con, buf);
             }
         }
     }
