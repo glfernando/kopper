@@ -5,7 +5,7 @@
 #![feature(alloc_error_handler)]
 #![feature(naked_functions)]
 #![feature(const_mut_refs)]
-#![feature(asm_sym)]
+#![allow(special_module_name)]
 
 extern crate kopper_macros as macros;
 
